@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>CAVDOME</title>
+<meta name="description" content="CAVDOME searches the open web for your claim and returns cut debate cards with tags, cites and highlighting.">
+<meta name="theme-color" content="#EEE4CE">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23173A2A'/%3E%3Cpath d='M6 23a10 10 0 0 1 20 0' fill='none' stroke='%23BFD1A9' stroke-width='3' stroke-linecap='round'/%3E%3Cpath d='M4 23h24' stroke='%23F2EADB' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Newsreader:ital,opsz,wght@1,6..72,400;1,6..72,500&family=Hanken+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Caveat:wght@500;700&family=Carlito:wght@400;700&family=Tinos:wght@400;700&family=Arimo:wght@400;700&display=swap">
+<link rel="stylesheet" href="/css/app.css">
+</head>
+<body>
+<div class="world" aria-hidden="true"><div class="blob a"></div><div class="blob b"></div><div class="blob c"></div><canvas id="topo"></canvas><div class="grain"></div></div>
+<div class="cursor-glow" id="glow" aria-hidden="true"></div>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand glass" href="#home" aria-label="CAVDOME home">
+      <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 24a12 12 0 0 1 24 0"/><path d="M9 24a7 7 0 0 1 14 0" opacity=".5"/><path d="M2 24h28"/><path d="M16 12V8"/></svg>
+      <b>Cavdome</b>
+    </a>
+    <div class="navhost" id="mainNav"></div>
+    <a class="btn sm top-cta" href="#search">Find cards</a>
+  </div>
+</header>
+
+<main>
+<!-- ================= HOME ================= -->
+<section class="view" data-view="home">
+  <div class="wrap hero">
+    <div class="hero-grid">
+      <div>
+        <span class="pill glass"><span class="dot"></span>Live web search · Policy · LD · PF</span>
+        <h1 class="display" style="margin-top:22px"><span class="ln"><span>Evidence</span></span><span class="ln"><span>for every</span></span><span class="ln"><span><em>round</em></span></span></h1>
+        <p class="lead">Type the claim you need to prove. CAVDOME searches the open web, reads the strongest recent articles and hands back cards with tags, cites and highlighting ready for your speech doc.</p>
+        <form class="hsearch glass thick" id="heroForm" role="search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+          <input id="heroQ" placeholder="Data centers are straining the power grid" aria-label="Claim to search">
+          <button class="btn" type="submit">Find cards <svg class="arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+        </form>
+        <div class="examples" id="examples">
+          <button class="ex" type="button">Tariffs raise prices for consumers</button>
+          <button class="ex" type="button">AI will displace entry-level jobs</button>
+          <button class="ex" type="button">Nuclear power decarbonizes the grid</button>
+        </div>
+      </div>
+      <div class="stage" id="stage" aria-hidden="true">
+        <svg class="layer s-dome" data-depth="10" viewBox="0 0 300 160" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 150a130 130 0 0 1 260 0" opacity=".5"/><path d="M50 150a100 100 0 0 1 200 0" opacity=".35"/><path d="M80 150a70 70 0 0 1 140 0" opacity=".25"/><path d="M0 150h300"/></svg>
+        <div class="layer glass thick s-search" data-depth="34">
+          <div class="row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><span class="typed" id="typed"></span></div>
+          <ul><li><span>Reading sources</span><b id="srcCount">0</b></li><li><span>Cards cut</span><b id="cutCount">0</b></li><li><span>Search engine</span><b>open web</b></li></ul>
+        </div>
+        <div class="layer s-card sweep" data-depth="20" id="heroCard">
+          <div class="t">Progress depends on sustained pressure from the people who want change.</div>
+          <div class="c"><b>Douglass, 1857</b> [Frederick Douglass, abolitionist and orator; "West India Emancipation," speech at Canandaigua, New York, August 3, 1857]</div>
+          <p><span class="u h">If there is no struggle there is no progress.</span> <span class="s">Those who profess to favor freedom and yet</span> <span class="u">deprecate agitation are men who want crops without plowing up the ground</span><span class="s">; they want rain without thunder and lightning.</span> <span class="u h">Power concedes nothing without a demand.</span> <span class="u">It never did and it never will.</span></p>
+        </div>
+        <div class="layer s-note" data-depth="44"><b>2NR</b><span>extend Douglass, they never answered the warrant</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="marquee" aria-hidden="true"><div class="track" id="marq"></div></div>
+
+  <div class="wrap sec">
+    <div class="sec-head reveal">
+      <h2 class="h2">How a search <em>becomes</em> a card</h2>
+      <p>No database of stale evidence. Every search reads today's web, so the cards are as fresh as the news.</p>
+    </div>
+    <div class="steps">
+      <div class="step glass reveal"><span class="n">01</span><h3>Search the open web</h3><p>CAVDOME runs your claim through a live search engine and gathers a dozen candidate articles.</p><div class="viz"><canvas class="viz-c" data-viz="search"></canvas></div></div>
+      <div class="step glass reveal d1"><span class="n">02</span><h3>Read every source</h3><p>Each article is opened and scored for how well it proves your claim, how recent it is and who wrote it.</p><div class="viz"><canvas class="viz-c" data-viz="read"></canvas></div></div>
+      <div class="step glass reveal d2"><span class="n">03</span><h3>Cut the passage</h3><p>The best passage gets a tag and a full cite, with the warrant underlined and the key words highlighted.</p><div class="viz"><canvas class="viz-c" data-viz="cut"></canvas></div></div>
+    </div>
+  </div>
+
+  <div class="wrap sec" style="padding-top:0">
+    <div class="sec-head reveal">
+      <h2 class="h2">Your whole prep <em>stack</em></h2>
+      <p>Research tools for the week before and round tools for the day of. Everything runs in the browser.</p>
+    </div>
+    <div class="kit">
+      <a class="tool glass tilt wide reveal" href="#search"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg></span><span class="k">Card lab</span><h3>Card Search</h3><p>Type a claim and get cut cards from articles published this year.</p><span class="go">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
+      <a class="tool glass tilt wide reveal d1" href="#cut"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="6" cy="6" r="2.6"/><circle cx="6" cy="18" r="2.6"/><path d="M8.2 7.6 20 18M8.2 16.4 20 6"/></svg></span><span class="k">Card lab</span><h3>Card Cut</h3><p>Paste any link and get the cite, tag and highlighting. Fix anything with Verbatim keys <kbd>F9</kbd> <kbd>F10</kbd> <kbd>F11</kbd>.</p><span class="go">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
+      <a class="tool glass tilt reveal" href="#block"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z"/></svg></span><span class="k">Card lab</span><h3>Block Generator</h3><p>Paste their card and find evidence that answers it.</p><span class="go">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
+      <a class="tool glass tilt reveal d1" href="#flow"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16M15 4v16"/></svg></span><span class="k">In round</span><h3>Flow</h3><p>Flow every speech in columns built for your event. Saves as you type.</p><span class="go">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
+      <a class="tool glass tilt reveal d2" href="#tools"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M9 2h6"/></svg></span><span class="k">In round</span><h3>Timers</h3><p>Speech and prep timers preset for Policy, LD and PF.</p><span class="go">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
+      <a class="tool glass tilt reveal" href="#library"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 5h4v15H4zM10 5h4v15h-4zM16 6l3.5-1 3 14-3.5 1z"/></svg></span><span class="k">Prep</span><h3>Card Library</h3><p>Every card you save, searchable, with a one-click speech doc for Word.</p><span class="go">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
+      <a class="tool glass tilt reveal d1" href="#tools"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></span><span class="k">Tournament</span><h3>Break Calculator</h3><p>See which records clear for elims from the field size and break.</p><span class="go">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
+      <a class="tool glass tilt reveal d2" href="#caselist"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg></span><span class="k">Tournament</span><h3>Caselist</h3><p>Look up what a team has disclosed on openCaselist.</p><span class="go">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="bookband reveal">
+      <div class="bk-root" id="book" tabindex="0" role="region" aria-roledescription="carousel" aria-label="The prep book">
+        <div class="bk-head"><h2>The prep book</h2><p>Drag the pages or use the arrow keys</p></div>
+        <div class="bk-stage" id="bkStage"><div class="bk-floor"></div><div class="bk-view"><div class="bk-scene" id="bkScene"></div></div></div>
+        <div class="bk-bar">
+          <button class="bk-btn" id="bkPrev" type="button" aria-label="Previous spread"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M15 6l-6 6 6 6"/></svg></button>
+          <span class="bk-label" id="bkLabel" aria-live="polite"></span>
+          <button class="bk-btn" id="bkNext" type="button" aria-label="Next spread"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="wrap sec-head reveal">
+      <h2 class="h2">What debaters <em>say</em></h2>
+      <span class="sample-tag" title="Replace these with real quotes before launch">Sample reviews · replace before launch</span>
+    </div>
+    <div class="reviews" id="reviews"></div>
+  </div>
+
+  <div class="wrap sec" style="padding-top:0">
+    <div class="faq">
+      <div class="reveal"><h2 class="h2">Questions <em>answered</em></h2><p class="lead" style="margin-top:16px">Anything else goes to the contact address in the footer.</p></div>
+      <div id="faq" class="reveal d1"></div>
+    </div>
+  </div>
+
+  <div class="wrap" style="padding-bottom:30px">
+    <div class="cta reveal">
+      <svg class="big" viewBox="0 0 300 160" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 150a130 130 0 0 1 260 0"/><path d="M50 150a100 100 0 0 1 200 0"/><path d="M80 150a70 70 0 0 1 140 0"/><path d="M0 150h300"/></svg>
+      <h2>Your next card is one search away</h2>
+      <p>Open Card Search, type the argument your flow is missing and have evidence in under a minute.</p>
+      <div class="row"><a class="btn" href="#search">Start searching <svg class="arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a><a class="btn ghost" href="#flow">Open the flow</a></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CARDS ================= -->
+<section class="view" data-view="cards" hidden>
+  <div class="wrap">
+    <div class="page-head"><div><h1>Cards <em>lab</em></h1><p>Search the web for evidence, cut articles into cards and answer the other side's evidence.</p></div></div>
+    <div class="tabhost" id="tabNav"></div>
+
+    <!-- SEARCH -->
+    <div class="panel" data-tab="search">
+      <div class="pane glass">
+        <h2>Card Search</h2>
+        <p class="sub">Type one claim. CAVDOME searches the web, reads up to fourteen articles and cuts the best passages.</p>
+        <form class="row" id="searchForm"><input class="in" id="sClaim" placeholder="Data center demand is raising residential electricity prices" aria-label="Claim"><button class="btn" id="btnFind" type="submit">Find cards</button></form>
+        <div class="opts"><label class="toggle"><input type="checkbox" id="sRecent" checked> Past year first</label><label class="toggle">Results <select class="tbsel" id="sN"><option>3</option><option>5</option><option>1</option></select></label><span id="sProv" style="font:500 12px var(--f-mono);color:var(--muted)"></span></div>
+        <div class="prog" id="sProg" hidden></div>
+        <div class="res" id="sRes"></div>
+      </div>
+    </div>
+
+    <!-- CUT -->
+    <div class="panel" data-tab="cut" hidden>
+      <div class="cols">
+        <div class="pane glass">
+          <h2>Source</h2>
+          <p class="sub">Paste a link or the article text. Add the argument to steer the passage and the tag.</p>
+          <label class="f" for="cUrl">Article link</label>
+          <input class="in" id="cUrl" type="url" placeholder="https://www.brookings.edu/articles/…" autocomplete="off">
+          <label class="f" for="cClaim">Argument this card proves (optional)</label>
+          <input class="in" id="cClaim" placeholder="Restarting closed reactors adds clean power fast">
+          <label class="f" for="cText">Or paste article text</label>
+          <textarea class="in" id="cText" placeholder="Paste the article here if the site blocks automated readers."></textarea>
+          <details class="cite" id="citeBox">
+            <summary>Cite details</summary>
+            <div class="fields">
+              <div class="w3"><label class="f" for="f-last">Last name</label><input class="in" id="f-last"></div>
+              <div class="w3"><label class="f" for="f-year">Year</label><input class="in" id="f-year" inputmode="numeric"></div>
+              <div class="w6"><label class="f" for="f-author">Author</label><input class="in" id="f-author"></div>
+              <div class="w6"><label class="f" for="f-quals">Qualifications</label><input class="in" id="f-quals"></div>
+              <div class="w6"><label class="f" for="f-title">Title</label><input class="in" id="f-title"></div>
+              <div class="w3"><label class="f" for="f-pub">Publication</label><input class="in" id="f-pub"></div>
+              <div class="w3"><label class="f" for="f-date">Published</label><input class="in" id="f-date"></div>
+              <div class="w4"><label class="f" for="f-url">URL</label><input class="in" id="f-url"></div>
+              <div class="w2"><label class="f" for="f-accessed">Accessed</label><input class="in" id="f-accessed"></div>
+            </div>
+          </details>
+          <div class="actions"><button class="btn" id="btnCut" type="button">Cut card</button><button class="btn ghost" id="btnHand" type="button">Cut by hand</button></div>
+          <div class="status" id="cutStatus" role="status"></div>
+        </div>
+        <div class="pane glass">
+          <h2>Card</h2>
+          <p class="sub">Select text and mark it. <kbd>F9</kbd> underline · <kbd>F10</kbd> bold · <kbd>F11</kbd> highlight · <kbd>F12</kbd> clear</p>
+          <div class="toolbar glass thick" id="toolbar">
+            <button class="tb" data-cmd="hl" type="button" title="Highlight (F11)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 11l-6 6v3h9l3-3"/><path d="M22 12l-4.6 4.6a2 2 0 0 1-2.8 0l-5.2-5.2a2 2 0 0 1 0-2.8L14 4"/></svg>Highlight</button>
+            <button class="sw" data-hl="g" aria-label="Green" aria-pressed="true" style="background:#A6E58A" type="button"></button>
+            <button class="sw" data-hl="y" aria-label="Yellow" aria-pressed="false" style="background:#FFEE6E" type="button"></button>
+            <button class="sw" data-hl="c" aria-label="Cyan" aria-pressed="false" style="background:#86E4EE" type="button"></button>
+            <span class="sep"></span>
+            <button class="tb" data-cmd="u" type="button" title="Underline (F9)"><u>U</u></button>
+            <button class="tb" data-cmd="b" type="button" title="Bold (F10)"><b>B</b></button>
+            <select class="tbsel" id="sizeSel" aria-label="Text size"><option value="">Size</option><option>6</option><option>8</option><option>10</option><option>11</option><option>12</option><option>13</option><option>14</option></select>
+            <button class="tb" data-cmd="shrink" type="button" aria-pressed="false">Shrink</button>
+            <button class="tb" data-cmd="condense" type="button">Condense</button>
+            <button class="tb" data-cmd="clear" type="button">Clear</button>
+            <span class="sep"></span>
+            <select class="tbsel" id="citeStyle" aria-label="Cite format"><option value="comma">Smith, 2025</option><option value="short">Smith 25</option></select>
+            <select class="tbsel" id="fontSel" aria-label="Card font"><option value="calibri">Calibri</option><option value="times">Times</option><option value="arial">Arial</option></select>
+          </div>
+          <div class="paper" id="paper">
+            <div id="cardTag" contenteditable="true" data-ph="Tag: the claim this card proves"></div>
+            <div id="cardCite"></div>
+            <div id="cardBody" contenteditable="true" spellcheck="false" data-ph="The card body appears here after you cut."></div>
+          </div>
+          <div class="actions"><button class="btn" id="btnCopy" type="button">Copy card</button><button class="btn ghost" id="btnSave" type="button">Save to library</button><button class="btn ghost" id="btnNew" type="button">New card</button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BLOCK -->
+    <div class="panel" data-tab="block" hidden>
+      <div class="pane glass">
+        <h2>Block Generator</h2>
+        <p class="sub">Paste the card you need to answer. CAVDOME searches for evidence that pushes back on its claim.</p>
+        <label class="f" for="bCard">Their card or claim</label>
+        <textarea class="in" id="bCard" style="min-height:130px" placeholder="Social media use causes depression in teenagers."></textarea>
+        <div class="opts"><label class="toggle">Answer angle <select class="tbsel" id="bAngle"><option value="">Strongest answer</option><option>No link</option><option>Non-unique</option><option>Turn</option><option>Impact defense</option></select></label><label class="toggle"><input type="checkbox" id="bRecent" checked> Past year first</label></div>
+        <div class="actions"><button class="btn" id="btnBlock" type="button">Find answers</button></div>
+        <div class="prog" id="bProg" hidden></div>
+        <div class="res" id="bRes"></div>
+      </div>
+    </div>
+
+    <!-- CASELIST -->
+    <div class="panel" data-tab="caselist" hidden>
+      <div class="pane glass">
+        <h2>Caselist</h2>
+        <p class="sub">Look up what a team has disclosed on openCaselist.</p>
+        <form class="row" id="clForm"><input class="in" id="clTeam" placeholder="School name and team code, e.g. Lexington AM" style="flex:2 1 260px"><select class="in" id="clEvent" style="flex:1 1 150px"><option value="hspolicy">HS Policy</option><option value="hsld">HS LD</option><option value="hspf">HS PF</option><option value="ndtceda">College Policy</option></select><button class="btn" id="btnCl" type="submit">Look up</button></form>
+        <div id="clOut"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FLOW ================= -->
+<section class="view" data-view="flow" hidden>
+  <div class="wrap">
+    <div class="page-head"><div><h1>Flow <em>sheet</em></h1><p>One column per speech. Type an argument per line. Everything saves in this browser as you go.</p></div></div>
+    <div class="flowbar glass">
+      <select class="tbsel" id="flowFmt" aria-label="Event"><option value="policy">Policy</option><option value="ld">Lincoln-Douglas</option><option value="pf">Public Forum</option></select>
+      <div class="sheets" id="sheets" role="tablist"></div>
+      <button class="btn xs ghost" id="addSheet" type="button">Add sheet</button>
+      <button class="btn xs ghost" id="copyFlow" type="button">Copy as text</button>
+      <button class="btn xs ghost" id="clearFlow" type="button">Clear sheet</button>
+    </div>
+    <div class="flowgrid" id="flowgrid"></div>
+  </div>
+</section>
+
+<!-- ================= LIBRARY ================= -->
+<section class="view" data-view="library" hidden>
+  <div class="wrap">
+    <div class="page-head"><div><h1>Card <em>library</em></h1><p>Cards you save live here, in this browser. Download them as a speech doc that opens in Word.</p></div>
+      <div class="row"><input class="in" id="libQ" placeholder="Filter by tag, author or text" style="min-width:240px"><button class="btn" id="libDoc" type="button">Download speech doc</button></div></div>
+    <div class="lib-grid" id="libGrid"></div>
+  </div>
+</section>
+
+<!-- ================= TOOLS ================= -->
+<section class="view" data-view="tools" hidden>
+  <div class="wrap">
+    <div class="page-head"><div><h1>Round <em>tools</em></h1><p>Speech and prep timers for your event, plus a break calculator for the tournament.</p></div></div>
+    <div class="timer">
+      <div class="pane glass">
+        <h2>Speech timer</h2>
+        <div class="row" style="margin-top:8px"><select class="tbsel" id="tFmt"><option value="policy">Policy</option><option value="ld">Lincoln-Douglas</option><option value="pf">Public Forum</option></select></div>
+        <div class="speeches" id="speeches"></div>
+        <div class="dial" id="dial">
+          <svg viewBox="0 0 200 200"><defs><linearGradient id="gradT" x1="0" x2="1"><stop offset="0" stop-color="#7FA36B"/><stop offset="1" stop-color="#256644"/></linearGradient></defs><circle class="trk" cx="100" cy="100" r="84"/><circle class="bar" id="dialBar" cx="100" cy="100" r="84" stroke-dasharray="527.8" stroke-dashoffset="0"/></svg>
+          <div class="read"><div><b id="tRead">8:00</b><span id="tName">1AC</span></div></div>
+        </div>
+        <div class="actions" style="justify-content:center"><button class="btn" id="tGo" type="button">Start</button><button class="btn ghost" id="tReset" type="button">Reset</button><button class="btn ghost xs" id="tMinus" type="button">−10s</button><button class="btn ghost xs" id="tPlus" type="button">+10s</button></div>
+      </div>
+      <div class="pane glass">
+        <h2>Prep time</h2>
+        <p class="sub">Tap a side to run its prep. Tap again to stop.</p>
+        <div class="prep"><button class="prepbox" id="prepA" type="button"><span>Aff prep</span><b>8:00</b></button><button class="prepbox" id="prepN" type="button"><span>Neg prep</span><b>8:00</b></button></div>
+        <h2 style="margin-top:30px">Break calculator</h2>
+        <p class="sub">Estimates how many entries finish at each record, assuming even matchups in power-matched rounds.</p>
+        <div class="fields">
+          <div class="w2"><label class="f" for="bcN">Entries</label><input class="in" id="bcN" type="number" min="2" value="120"></div>
+          <div class="w2"><label class="f" for="bcR">Prelims</label><input class="in" id="bcR" type="number" min="1" max="12" value="6"></div>
+          <div class="w2"><label class="f" for="bcB">Break to</label><select class="in" id="bcB"><option value="8">Quarters (8)</option><option value="16">Octos (16)</option><option value="32" selected>Doubles (32)</option><option value="64">Triples (64)</option></select></div>
+        </div>
+        <div class="bars" id="bcBars"></div>
+        <div class="legend"><span><i style="background:var(--green)"></i>Clears</span><span><i style="background:#C9A227"></i>Bubble, speaks decide</span><span><i style="background:#A7AF9F"></i>Out</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer><div class="wrap"><b>CAVDOME</b><span>Evidence pulled live from the open web. Always check a card against its source before you read it.</span></div></footer>
+<div class="toast" id="toast" role="status"></div>
+<script src="/js/fx.js"></script>
+<script src="/js/app.js"></script>
+</body>
+</html>
