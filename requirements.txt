@@ -1,0 +1,2 @@
+# No third-party packages needed. certifi is optional and helps on some hosts.
+certifi
