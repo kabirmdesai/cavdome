@@ -1,8 +1,7 @@
 """CAVDOME web server. Python 3.9+ standard library only.
 
 Run:  python3 server.py         (then open http://localhost:8000)
-Env:  PORT, SERPER_API_KEY (Google results), GOOGLE_CSE_KEY + GOOGLE_CSE_CX,
-      OPENCASELIST_USERNAME + OPENCASELIST_PASSWORD, CA_BUNDLE
+Env:  PORT, CA_BUNDLE
 """
 import json
 import mimetypes
@@ -17,8 +16,6 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import cards  # noqa: E402
-import caselist  # noqa: E402
-import search  # noqa: E402
 from net import FetchError  # noqa: E402
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static")
@@ -66,42 +63,18 @@ class H(BaseHTTPRequestHandler):
     def do_GET(self):
         path = self.path.split("?")[0]
         if path == "/api/health":
-            return self._json(200, {"ok": True, "search": search.providers(), "caselist": caselist.configured()})
-        if path == "/api/caselist":
-            from urllib.parse import parse_qs, urlparse
-            q = parse_qs(urlparse(self.path).query)
-            team = (q.get("team") or [""])[0].strip()
-            event = (q.get("event") or ["hspolicy"])[0]
-            if not team:
-                return self._json(400, {"error": "Type a team name."})
-            if not caselist.configured():
-                return self._json(200, {"error": "not_configured"})
-            try:
-                return self._json(200, caselist.lookup(team, event))
-            except caselist.CaselistError as e:
-                return self._json(200, {"error": str(e)})
+            return self._json(200, {"ok": True})
         return self._static(path)
 
     def do_POST(self):
         path = self.path.split("?")[0]
-        if limited(self._ip(), 3 if path == "/api/find" else 1):
+        if limited(self._ip()):
             return self._json(429, {"error": "Too many requests. Wait a minute and try again."})
         try:
             d = self._body()
         except Exception:
             return self._json(400, {"error": "Bad request."})
         try:
-            if path == "/api/find":
-                claim = str(d.get("claim", "")).strip()[:400]
-                if len(claim) < 4:
-                    return self._json(400, {"error": "Type a claim first."})
-                mode = "block" if d.get("mode") == "block" else "support"
-                r = cards.find_cards(claim, mode=mode, recent=bool(d.get("recent", True)),
-                                     n=max(1, min(5, int(d.get("n", 3)))), angle=str(d.get("angle", ""))[:40])
-                if not r["cards"]:
-                    r["error"] = ("Search ran but no article could be read. Try different wording."
-                                  if r["searched"] else "The search engines didn't answer. Try again in a minute.")
-                return self._json(200, r)
             if path == "/api/cut":
                 url = str(d.get("url", "")).strip()
                 claim = str(d.get("claim", "")).strip()[:400]
@@ -113,10 +86,6 @@ class H(BaseHTTPRequestHandler):
                 if len(text.split()) < 15:
                     return self._json(400, {"error": "Paste a link or at least a paragraph of text."})
                 return self._json(200, cards.cut_text(text, claim))
-            if path == "/api/search":
-                q = str(d.get("q", "")).strip()[:300]
-                prov, res = search.search(q, bool(d.get("recent")))
-                return self._json(200, {"provider": prov, "results": res[:15]})
         except FetchError as e:
             msg = str(e)
             if msg.startswith("HTTP 403") or msg.startswith("HTTP 401"):

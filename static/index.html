@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>CAVDOME</title>
-<meta name="description" content="CAVDOME searches the open web for your claim and returns cut debate cards with tags, cites and highlighting.">
+<meta name="description" content="CAVDOME cuts debate cards from any link, strips carded cases down to the highlighted text, and keeps your flow, library and timers in one place.">
 <meta name="theme-color" content="#EEE4CE">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23173A2A'/%3E%3Cpath d='M6 23a10 10 0 0 1 20 0' fill='none' stroke='%23BFD1A9' stroke-width='3' stroke-linecap='round'/%3E%3Cpath d='M4 23h24' stroke='%23F2EADB' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -23,7 +23,7 @@
       <b>Cavdome</b>
     </a>
     <div class="navhost" id="mainNav"></div>
-    <a class="btn sm top-cta" href="#search">Find cards</a>
+    <a class="btn sm top-cta" href="#cut">Cut a card</a>
   </div>
 </header>
 
@@ -33,25 +33,25 @@
   <div class="wrap hero">
     <div class="hero-grid">
       <div>
-        <span class="pill glass"><span class="dot"></span>Live web search · Policy · LD · PF</span>
+        <span class="pill glass"><span class="dot"></span>Policy · LD · PF</span>
         <h1 class="display" style="margin-top:22px"><span class="ln"><span>Evidence</span></span><span class="ln"><span>for every</span></span><span class="ln"><span><em>round</em></span></span></h1>
-        <p class="lead">Type the claim you need to prove. CAVDOME searches the open web, reads the strongest recent articles and hands back cards with tags, cites and highlighting ready for your speech doc.</p>
-        <form class="hsearch glass thick" id="heroForm" role="search">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
-          <input id="heroQ" placeholder="Data centers are straining the power grid" aria-label="Claim to search">
-          <button class="btn" type="submit">Find cards <svg class="arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+        <p class="lead">Paste an article and get a card with the tag, cite and highlighting done. Drop in a carded case and get back only what gets read. Then flow the round and run the clock from the same tab.</p>
+        <form class="hsearch glass thick" id="heroForm">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg>
+          <input id="heroQ" type="url" placeholder="Paste an article link" aria-label="Article link" autocomplete="off">
+          <button class="btn" type="submit">Cut card <svg class="arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
         </form>
-        <div class="examples" id="examples">
-          <button class="ex" type="button">Tariffs raise prices for consumers</button>
-          <button class="ex" type="button">AI will displace entry-level jobs</button>
-          <button class="ex" type="button">Nuclear power decarbonizes the grid</button>
+        <div class="examples">
+          <a class="ex" href="#read">Highlights Only</a>
+          <a class="ex" href="#flow">Flow</a>
+          <a class="ex" href="#tools">Timers</a>
         </div>
       </div>
       <div class="stage" id="stage" aria-hidden="true">
         <svg class="layer s-dome" data-depth="10" viewBox="0 0 300 160" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 150a130 130 0 0 1 260 0" opacity=".5"/><path d="M50 150a100 100 0 0 1 200 0" opacity=".35"/><path d="M80 150a70 70 0 0 1 140 0" opacity=".25"/><path d="M0 150h300"/></svg>
         <div class="layer glass thick s-search" data-depth="34">
-          <div class="row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><span class="typed" id="typed"></span></div>
-          <ul><li><span>Reading sources</span><b id="srcCount">0</b></li><li><span>Cards cut</span><b id="cutCount">0</b></li><li><span>Search engine</span><b>open web</b></li></ul>
+          <div class="row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg><span class="typed" id="typed"></span></div>
+          <ul><li><span>Paragraphs read</span><b id="srcCount">0</b></li><li><span>Cards cut</span><b id="cutCount">0</b></li><li><span>Cite</span><b>auto</b></li></ul>
         </div>
         <div class="layer s-card sweep" data-depth="20" id="heroCard">
           <div class="t">Progress depends on sustained pressure from the people who want change.</div>
@@ -67,13 +67,13 @@
 
   <div class="wrap sec">
     <div class="sec-head reveal">
-      <h2 class="h2">How a search <em>becomes</em> a card</h2>
-      <p>No database of stale evidence. Every search reads today's web, so the cards are as fresh as the news.</p>
+      <h2 class="h2">How a link <em>becomes</em> a card</h2>
+      <p>Paste the article you found. CAVDOME reads the page and does the formatting you would otherwise do by hand.</p>
     </div>
     <div class="steps">
-      <div class="step glass reveal"><span class="n">01</span><h3>Search the open web</h3><p>CAVDOME runs your claim through a live search engine and gathers a dozen candidate articles.</p><div class="viz"><canvas class="viz-c" data-viz="search"></canvas></div></div>
-      <div class="step glass reveal d1"><span class="n">02</span><h3>Read every source</h3><p>Each article is opened and scored for how well it proves your claim, how recent it is and who wrote it.</p><div class="viz"><canvas class="viz-c" data-viz="read"></canvas></div></div>
-      <div class="step glass reveal d2"><span class="n">03</span><h3>Cut the passage</h3><p>The best passage gets a tag and a full cite, with the warrant underlined and the key words highlighted.</p><div class="viz"><canvas class="viz-c" data-viz="cut"></canvas></div></div>
+      <div class="step glass reveal"><span class="n">01</span><h3>Open the page</h3><p>CAVDOME loads the article and pulls out the text, author, qualifications, publication and date.</p><div class="viz"><canvas class="viz-c" data-viz="search"></canvas></div></div>
+      <div class="step glass reveal d1"><span class="n">02</span><h3>Find the passage</h3><p>Every paragraph is scored against the argument you typed, and the strongest stretch of text is picked.</p><div class="viz"><canvas class="viz-c" data-viz="read"></canvas></div></div>
+      <div class="step glass reveal d2"><span class="n">03</span><h3>Cut and mark</h3><p>The passage gets a tag and a full cite, with underlining and highlighting you can change in a click.</p><div class="viz"><canvas class="viz-c" data-viz="cut"></canvas></div></div>
     </div>
   </div>
 
@@ -83,14 +83,11 @@
       <p>Research tools for the week before and round tools for the day of. Everything runs in the browser.</p>
     </div>
     <div class="kit">
-      <a class="tool glass tilt wide reveal" href="#search"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg></span><span class="k">Card lab</span><h3>Card Search</h3><p>Type a claim and get cut cards from articles published this year.</p><span class="go">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
-      <a class="tool glass tilt wide reveal d1" href="#cut"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="6" cy="6" r="2.6"/><circle cx="6" cy="18" r="2.6"/><path d="M8.2 7.6 20 18M8.2 16.4 20 6"/></svg></span><span class="k">Card lab</span><h3>Card Cut</h3><p>Paste any link and get the cite, tag and highlighting. Fix anything with Verbatim keys <kbd>F9</kbd> <kbd>F10</kbd> <kbd>F11</kbd>.</p><span class="go">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
-      <a class="tool glass tilt reveal" href="#block"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z"/></svg></span><span class="k">Card lab</span><h3>Block Generator</h3><p>Paste their card and find evidence that answers it.</p><span class="go">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
-      <a class="tool glass tilt reveal d1" href="#flow"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16M15 4v16"/></svg></span><span class="k">In round</span><h3>Flow</h3><p>Flow every speech in columns built for your event. Saves as you type.</p><span class="go">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
-      <a class="tool glass tilt reveal d2" href="#tools"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M9 2h6"/></svg></span><span class="k">In round</span><h3>Timers</h3><p>Speech and prep timers preset for Policy, LD and PF.</p><span class="go">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
-      <a class="tool glass tilt reveal" href="#library"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 5h4v15H4zM10 5h4v15h-4zM16 6l3.5-1 3 14-3.5 1z"/></svg></span><span class="k">Prep</span><h3>Card Library</h3><p>Every card you save, searchable, with a one-click speech doc for Word.</p><span class="go">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
-      <a class="tool glass tilt reveal d1" href="#tools"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></span><span class="k">Tournament</span><h3>Break Calculator</h3><p>See which records clear for elims from the field size and break.</p><span class="go">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
-      <a class="tool glass tilt reveal d2" href="#caselist"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg></span><span class="k">Tournament</span><h3>Caselist</h3><p>Look up what a team has disclosed on openCaselist.</p><span class="go">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
+      <a class="tool glass tilt wide reveal" href="#cut"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="6" cy="6" r="2.6"/><circle cx="6" cy="18" r="2.6"/><path d="M8.2 7.6 20 18M8.2 16.4 20 6"/></svg></span><span class="k">Card lab</span><h3>Card Cut</h3><p>Paste any link and get the cite, tag and highlighting. Fix anything with Verbatim keys <kbd>F9</kbd> <kbd>F10</kbd> <kbd>F11</kbd>.</p><span class="go">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
+      <a class="tool glass tilt wide reveal d1" href="#read"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M8.5 13h7M8.5 16.5h4"/></svg></span><span class="k">Card lab</span><h3>Highlights Only</h3><p>Drop in a carded case PDF and keep only the tags, the evidence names and the highlighted words.</p><span class="go">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
+      <a class="tool glass tilt reveal" href="#flow"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16M15 4v16"/></svg></span><span class="k">In round</span><h3>Flow</h3><p>Flow every speech in columns built for your event. Saves as you type.</p><span class="go">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
+      <a class="tool glass tilt reveal d1" href="#library"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 5h4v15H4zM10 5h4v15h-4zM16 6l3.5-1 3 14-3.5 1z"/></svg></span><span class="k">Prep</span><h3>Card Library</h3><p>Every card you save, searchable, with a one-click speech doc for Word.</p><span class="go">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
+      <a class="tool glass tilt reveal d2" href="#tools"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M9 2h6"/></svg></span><span class="k">Tournament</span><h3>Round Tools</h3><p>Speech and prep timers for Policy, LD and PF, plus a break calculator.</p><span class="go">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
     </div>
   </div>
 
@@ -126,9 +123,9 @@
   <div class="wrap" style="padding-bottom:30px">
     <div class="cta reveal">
       <svg class="big" viewBox="0 0 300 160" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 150a130 130 0 0 1 260 0"/><path d="M50 150a100 100 0 0 1 200 0"/><path d="M80 150a70 70 0 0 1 140 0"/><path d="M0 150h300"/></svg>
-      <h2>Your next card is one search away</h2>
-      <p>Open Card Search, type the argument your flow is missing and have evidence in under a minute.</p>
-      <div class="row"><a class="btn" href="#search">Start searching <svg class="arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a><a class="btn ghost" href="#flow">Open the flow</a></div>
+      <h2>Your next card is one link away</h2>
+      <p>Open Card Cut, paste the article your flow is missing and have a card in under a minute.</p>
+      <div class="row"><a class="btn" href="#cut">Cut a card <svg class="arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a><a class="btn ghost" href="#flow">Open the flow</a></div>
     </div>
   </div>
 </section>
@@ -136,23 +133,11 @@
 <!-- ================= CARDS ================= -->
 <section class="view" data-view="cards" hidden>
   <div class="wrap">
-    <div class="page-head"><div><h1>Cards <em>lab</em></h1><p>Search the web for evidence, cut articles into cards and answer the other side's evidence.</p></div></div>
+    <div class="page-head"><div><h1>Cards <em>lab</em></h1><p>Cut articles into cards, or strip a carded case down to what gets read aloud.</p></div></div>
     <div class="tabhost" id="tabNav"></div>
 
-    <!-- SEARCH -->
-    <div class="panel" data-tab="search">
-      <div class="pane glass">
-        <h2>Card Search</h2>
-        <p class="sub">Type one claim. CAVDOME searches the web, reads up to fourteen articles and cuts the best passages.</p>
-        <form class="row" id="searchForm"><input class="in" id="sClaim" placeholder="Data center demand is raising residential electricity prices" aria-label="Claim"><button class="btn" id="btnFind" type="submit">Find cards</button></form>
-        <div class="opts"><label class="toggle"><input type="checkbox" id="sRecent" checked> Past year first</label><label class="toggle">Results <select class="tbsel" id="sN"><option>3</option><option>5</option><option>1</option></select></label><span id="sProv" style="font:500 12px var(--f-mono);color:var(--muted)"></span></div>
-        <div class="prog" id="sProg" hidden></div>
-        <div class="res" id="sRes"></div>
-      </div>
-    </div>
-
     <!-- CUT -->
-    <div class="panel" data-tab="cut" hidden>
+    <div class="panel" data-tab="cut">
       <div class="cols">
         <div class="pane glass">
           <h2>Source</h2>
@@ -209,27 +194,28 @@
       </div>
     </div>
 
-    <!-- BLOCK -->
-    <div class="panel" data-tab="block" hidden>
-      <div class="pane glass">
-        <h2>Block Generator</h2>
-        <p class="sub">Paste the card you need to answer. CAVDOME searches for evidence that pushes back on its claim.</p>
-        <label class="f" for="bCard">Their card or claim</label>
-        <textarea class="in" id="bCard" style="min-height:130px" placeholder="Social media use causes depression in teenagers."></textarea>
-        <div class="opts"><label class="toggle">Answer angle <select class="tbsel" id="bAngle"><option value="">Strongest answer</option><option>No link</option><option>Non-unique</option><option>Turn</option><option>Impact defense</option></select></label><label class="toggle"><input type="checkbox" id="bRecent" checked> Past year first</label></div>
-        <div class="actions"><button class="btn" id="btnBlock" type="button">Find answers</button></div>
-        <div class="prog" id="bProg" hidden></div>
-        <div class="res" id="bRes"></div>
-      </div>
-    </div>
-
-    <!-- CASELIST -->
-    <div class="panel" data-tab="caselist" hidden>
-      <div class="pane glass">
-        <h2>Caselist</h2>
-        <p class="sub">Look up what a team has disclosed on openCaselist.</p>
-        <form class="row" id="clForm"><input class="in" id="clTeam" placeholder="School name and team code, e.g. Lexington AM" style="flex:2 1 260px"><select class="in" id="clEvent" style="flex:1 1 150px"><option value="hspolicy">HS Policy</option><option value="hsld">HS LD</option><option value="hspf">HS PF</option><option value="ndtceda">College Policy</option></select><button class="btn" id="btnCl" type="submit">Look up</button></form>
-        <div id="clOut"></div>
+    <!-- HIGHLIGHTS ONLY -->
+    <div class="panel" data-tab="read" hidden>
+      <div class="cols">
+        <div class="pane glass">
+          <h2>Case PDF</h2>
+          <p class="sub">Upload a carded case with highlighting. You get back the tags, the evidence names and the highlighted text, word for word.</p>
+          <label class="drop" id="hoDrop">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M12 17v-6M9.5 13.5 12 11l2.5 2.5"/></svg>
+            <b>Drop a PDF here</b><span>or click to choose one</span>
+            <input type="file" id="hoFile" accept="application/pdf,.pdf">
+          </label>
+          <div class="hofile" id="hoName"></div>
+          <div class="hobar" id="hoBar" hidden><i></i></div>
+          <div class="status" id="hoStatus" role="status"></div>
+          <p class="sub" style="margin-top:14px;font-size:13.5px">The PDF is read in your browser and is never uploaded.</p>
+        </div>
+        <div class="pane glass">
+          <h2>Read copy</h2>
+          <p class="sub">Tags and evidence names in bold, then every highlighted word in order.</p>
+          <div class="paper"><div id="hoOut" data-ph="Your read copy appears here."></div></div>
+          <div class="actions"><button class="btn" id="hoCopy" type="button">Copy</button><button class="btn ghost" id="hoDoc" type="button">Download .doc</button></div>
+        </div>
       </div>
     </div>
   </div>
@@ -293,7 +279,7 @@
 </section>
 </main>
 
-<footer><div class="wrap"><b>CAVDOME</b><span>Evidence pulled live from the open web. Always check a card against its source before you read it.</span></div></footer>
+<footer><div class="wrap"><b>CAVDOME</b><span>Always check a card against its source before you read it.</span></div></footer>
 <div class="toast" id="toast" role="status"></div>
 <script src="/js/fx.js"></script>
 <script src="/js/app.js"></script>

@@ -1,8 +1,8 @@
 # CAVDOME
 
-Debate evidence workspace. Card Search, Card Cut, Block Generator, Caselist, Flow, Card Library, speech and prep timers, and a break calculator.
+Debate evidence workspace. Card Cut, Highlights Only, Flow, Card Library, speech and prep timers, and a break calculator.
 
-Searching and card cutting run on the server with no AI and no API keys. The server searches DuckDuckGo (with Bing as a fallback), opens the articles, scores passages against your claim, and returns cut cards with tags, cites, underlining and highlighting.
+Card Cut runs on the server with no API keys: it opens the article, scores passages against your argument and returns a card with a tag, cite, underlining and highlighting. Highlights Only reads a carded case PDF in the browser (using pdf.js) and keeps only the tags, evidence names and highlighted text.
 
 ## Run it on your computer
 
@@ -30,15 +30,11 @@ Railway, Fly.io and any VPS work the same way: run `python3 server.py` and set `
 
 | Variable | What it does |
 |---|---|
-| `SERPER_API_KEY` | Uses Google results through serper.dev instead of DuckDuckGo. |
-| `GOOGLE_CSE_KEY` + `GOOGLE_CSE_CX` | Uses Google Programmable Search instead. |
-| `OPENCASELIST_USERNAME` + `OPENCASELIST_PASSWORD` | A Tabroom login so the Caselist tab can read openCaselist. Without it, Caselist shows a setup notice. |
 | `CA_BUNDLE` | Path to a certificate file, only needed on networks that inspect HTTPS traffic. |
 | `PORT` | Port to listen on (default 8000). |
 
 ## Notes
 
-- Some publishers block automated readers. CAVDOME skips them and uses the next result. Card Cut accepts pasted text for those sites.
+- Some publishers block automated readers. Card Cut accepts pasted text for those sites.
 - Flow, Library and settings are stored in each visitor's browser.
 - The homepage reviews are placeholders. Replace them in `static/js/app.js` (`REVIEWS`) with real quotes before launch.
-- The Caselist connector has not been tested against a real openCaselist login.

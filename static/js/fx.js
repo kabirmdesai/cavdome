@@ -65,7 +65,7 @@ class LiquidNav{
   ripple(x,y,a){if(REDUCE)return;this.s.rips.push({x,y,age:0,amp:a});this.loop()}
   select(i){const ic=this.btns[i].querySelector('.lnav-ico');ic.classList.remove('fx');void ic.offsetWidth;ic.classList.add('fx');if(i!==this.cur){this.setActive(i);this.onChange(i,this.items[i])}}
   setActive(i){this.cur=i;this.btns.forEach((b,k)=>k===i?b.setAttribute('aria-current','page'):b.removeAttribute('aria-current'));this.measure()}
-  measure(){const s=this.s,el=this.btns[this.cur],nav=this.nav;if(!el||!nav.offsetWidth)return;s.w=nav.scrollWidth;s.h=nav.offsetHeight;const T=s.t;
+  measure(){const s=this.s,el=this.btns[this.cur],nav=this.nav;if(!el||!nav.offsetWidth)return;s.w=nav.offsetWidth;s.h=nav.offsetHeight;const T=s.t;
     T.r=el.offsetHeight/2;T.q=Math.max(0,el.offsetWidth/2-T.r);T.cy=PAD+el.offsetTop+el.offsetHeight/2;const nx=PAD+el.offsetLeft+el.offsetWidth/2;
     if(!s.ready){s.a.x=s.b.x=nx;s.q=T.q;s.ready=true}else if(Math.abs(nx-T.x)>.5){s.lead=Math.abs(nx-s.a.x)<=Math.abs(nx-s.b.x)?0:1;s.lagFrom=performance.now()+70;s.moving=true;s.split=false}
     T.x=nx;const d=Math.min(devicePixelRatio||1,2),W=s.w+PAD*2,Hh=s.h+PAD*2;if(this.cv.width!==Math.round(W*d)||this.cv.height!==Math.round(Hh*d)){this.cv.width=Math.round(W*d);this.cv.height=Math.round(Hh*d);this.cv.style.width=W+'px';this.cv.style.height=Hh+'px'}this.loop()}
@@ -137,11 +137,11 @@ document.addEventListener('pointermove',e=>{const b=e.target.closest&&e.target.c
 FX.stage=function(){const st=document.getElementById('stage');if(!st)return;const layers=[...st.querySelectorAll('.layer')];
   if(!REDUCE)addEventListener('pointermove',e=>{const r=st.getBoundingClientRect();if(r.bottom<0)return;const px=(e.clientX/innerWidth-.5),py=(e.clientY/innerHeight-.5);
     layers.forEach(l=>{const d=+l.dataset.depth||10;l.style.transform='translate3d('+(-px*d)+'px,'+(-py*d)+'px,0) rotateY('+(px*4)+'deg) rotateX('+(-py*4)+'deg)'})},{passive:true});
-  const claims=['data centers strain the power grid','tariffs raise consumer prices','AI displaces entry-level jobs','nuclear power cuts emissions'],typed=document.getElementById('typed'),src=document.getElementById('srcCount'),cut=document.getElementById('cutCount'),card=document.getElementById('heroCard');
+  const claims=['apnews.com/article/supreme-court-ruling','brookings.edu/articles/housing-supply','nature.com/articles/ocean-heat-record','cbo.gov/publication/federal-debt-outlook'],typed=document.getElementById('typed'),src=document.getElementById('srcCount'),cut=document.getElementById('cutCount'),card=document.getElementById('heroCard');
   let ci=0;async function cycle(){const c=claims[ci++%claims.length];typed.textContent='';card.classList.remove('go');src.textContent='0';cut.textContent='0';
     for(let i=1;i<=c.length;i++){typed.textContent=c.slice(0,i);await wait(REDUCE?0:38)}
     for(let i=1;i<=12;i++){src.textContent=i;await wait(REDUCE?0:70)}
-    cut.textContent='3';card.classList.add('go');await wait(5200);cycle()}
+    cut.textContent='1';card.classList.add('go');await wait(5200);cycle()}
   setTimeout(cycle,700)};
 const wait=ms=>new Promise(r=>setTimeout(r,ms));
 
